@@ -5,14 +5,14 @@ import { getBarcodeScanner } from 'lightning/mobileCapabilities';
 
 export default class BarcodeScanner extends NavigationMixin(LightningElement) {
     myScanner;
-    scanButtonDisabled = true;
+    scanButtonEnabled = false;
     scannedQrCode = '';
 
     // When the component is initialized, determine whether to enable the Scan button
     connectedCallback() {
         this.myScanner = getBarcodeScanner();
         if (this.myScanner?.isAvailable()) {
-            this.scanButtonDisabled = false;
+            this.scanButtonEnabled = true;
         }
     }
 
@@ -31,9 +31,8 @@ export default class BarcodeScanner extends NavigationMixin(LightningElement) {
 
             // Try starting the scanning process, then using the result to navigate to a property record
             try {
-                const captureResult = await this.myScanner.beginCapture(
-                    scanningOptions
-                );
+                const captureResult =
+                    await this.myScanner.beginCapture(scanningOptions);
 
                 // Extract QR code data
                 this.scannedQrCode = captureResult.value;
